@@ -1,28 +1,37 @@
-import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { object, string, number } from 'yup';
 import { ContForm, Input, SubmitButton, Error } from './ContactForm.styled';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/contactSlice';
+import { nanoid } from 'nanoid';
+import { toast } from 'react-toastify';
+import { selectContacts } from 'redux/selectors';
 
 const validationSchema = object({
   name: string().min(4).required(),
   number: number().min(4).required()
 });
 
-const initialValues = {
-  name: "",
-  number: ""
-};
+const ContactForm = () => {
+  const dispatch = useDispatch();
+  const contacts = useSelector(selectContacts);
 
-const ContactForm = ({ addContact }) => {
-  
-  const handleSubmit = (values, { resetForm }) => {
-    addContact(values);
+  const handleSubmit = ({name, number, id = nanoid()}, { resetForm }) => {
+
+
+    contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase()) ?
+      toast.error(`${name} is already in contacts`) :
+      dispatch(addContact({name, number, id}));
+
     resetForm();
   };
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{
+        name: "",
+        number: "",
+      }}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
     >
@@ -53,10 +62,6 @@ const ContactForm = ({ addContact }) => {
       </ContForm>
     </Formik>
   );
-};
-
-ContactForm.propTypes = {
-  addContact: PropTypes.func.isRequired
 };
 
 export default ContactForm;
