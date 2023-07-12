@@ -1,11 +1,12 @@
+import { useSelector } from 'react-redux';
+import { selectContacts } from 'redux/selectors';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Title } from "./App.styled";
 import ContactForm from "../ContactForm";
 import Filter from "../Filter";
 import ContactList from "../ContactList";
-import { useSelector } from 'react-redux';
-import { selectContacts } from 'redux/selectors';
+
 
 export const App = () => {
   const contacts = useSelector(selectContacts);
@@ -32,4 +33,3 @@ export const App = () => {
     </>
   );
 };
-

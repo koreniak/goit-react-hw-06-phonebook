@@ -9,7 +9,7 @@ import { selectContacts } from 'redux/selectors';
 
 const validationSchema = object({
   name: string().min(4).required(),
-  number: number().min(4).required()
+  number: number().min(4).required(),
 });
 
 const ContactForm = () => {
@@ -17,7 +17,6 @@ const ContactForm = () => {
   const contacts = useSelector(selectContacts);
 
   const handleSubmit = ({name, number, id = nanoid()}, { resetForm }) => {
-
 
     contacts.find(contact => contact.name.toLowerCase() === name.toLowerCase()) ?
       toast.error(`${name} is already in contacts`) :
@@ -30,7 +29,7 @@ const ContactForm = () => {
     <Formik
       initialValues={{
         name: "",
-        number: "",
+        number: ""
       }}
       onSubmit={handleSubmit}
       validationSchema={validationSchema}
